@@ -1,0 +1,27 @@
+48,49d47
+< /* Partial fix for GCC, don't have other compilers */
+< #define TYPEOF(x) __typeof(x) 
+247c245
+<     TYPEOF(head) _el_iter = head;                               		 \
+---
+>     struct UT_hash_handle *_hs_iter = &(head)->hh;                               \
+250c248
+<       if (cmpfcn(_el_iter, add) > 0)                                             \
+---
+>       if (cmpfcn(DECLTYPE(head) ELMT_FROM_HH((head)->hh.tbl, _hs_iter), add) > 0) \
+252,256c250,254
+<     } while ((_el_iter = _el_iter->hh.next));                                    \
+<     if (_el_iter) {                                                              \
+<       (add)->hh.next = _el_iter;                                                 \
+<       if (((add)->hh.prev = _el_iter->hh.prev)) {                                \
+<         HH_FROM_ELMT((head)->hh.tbl, _el_iter->hh.prev)->next = (add);           \
+---
+>     } while ((_hs_iter = _hs_iter->next));                                       \
+>     if (_hs_iter) {                                                              \
+>       (add)->hh.next = _hs_iter;                                                 \
+>       if (((add)->hh.prev = _hs_iter->prev)) {                                   \
+>         HH_FROM_ELMT((head)->hh.tbl, _hs_iter->prev)->next = (add);              \
+260c258
+<       _el_iter->hh.prev = (add);                                                 \
+---
+>       _hs_iter->prev = (add);                                                    \
